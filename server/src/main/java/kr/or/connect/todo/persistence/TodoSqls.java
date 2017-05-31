@@ -2,13 +2,13 @@ package kr.or.connect.todo.persistence;
 
 public class TodoSqls {
 	static final String SELECT_ALL =
-			"SELECT id, title, desc, create_at, modified_at FROM todo";
+			"SELECT id, title, desc, created, modified FROM todo";
 	static final String DELETE_BY_ID =
 			"DELETE FROM todo WHERE id= :id";
 	static final String SELECT_BY_TASK =
-			"SELECT id, title, desc, create_at, modified_at FROM todo WHERE task= :task";
+			"SELECT id, title, desc, created, modified FROM todo WHERE task= :task";
 	static final String SELECT_BY_ID =
-			"SELECT id, title, desc, create_at, modified_at FROM todo WHERE id= :id";
+			"SELECT id, title, desc, created, modified FROM todo WHERE id= :id";
 	static final String UPDATE_BY_ID =
 			"UPDATE todo SET\n"
 					+ "title = :title,"
