@@ -1,4 +1,4 @@
-package kr.or.connect.todo.presentation;
+package kr.or.connect.todo.api;
 
 import kr.or.connect.todo.domain.Todo;
 import kr.or.connect.todo.service.TodoService;
@@ -14,7 +14,7 @@ import java.util.Collection;
  * Created by ODOL on 2017. 5. 30..
  */
 @RestController
-@RequestMapping("/api/todo")
+@RequestMapping("/api/todos")
 public class TodoController {
     private final TodoService todoService;
     private final Logger log = LoggerFactory.getLogger(TodoController.class);

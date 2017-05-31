@@ -31,7 +31,7 @@ public class TodoDao {
 
 	}
 
-	public int countTodo() {
+	public Integer countTodo() {
 		Map<String, Object> params = Collections.emptyMap();
 		return jdbc.queryForObject(COUNT_TODO, params, Integer.class);
 	}
@@ -56,7 +56,8 @@ public class TodoDao {
 	public Integer insert(Todo todo) {
         System.out.println(todo);
         SqlParameterSource params = new BeanPropertySqlParameterSource(todo);
-        return insertAction.executeAndReturnKey(params).intValue();
+        return jdbc.update(INSERT_TODO, params);
+//        return insertAction.executeAndReturnKey(params).intValue();
 	}
 
 	public Integer update(Todo todo) {
