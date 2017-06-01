@@ -34,10 +34,10 @@ public class TodoController {
         return todoService.findByTask(task);
     }
 
-    @GetMapping("/{id}")
-    Todo readById(@PathVariable Integer id) {
-        return todoService.findById(id);
-    }
+//    @GetMapping("/{id}")
+//    Todo readById(@PathVariable Integer id) {
+//        return todoService.findById(id);
+//    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
