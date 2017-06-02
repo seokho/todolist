@@ -33,50 +33,45 @@ public class TodoDao {
 
 	}
 
-	public Integer countTodo( ) {
-		Map<String, Object> params = Collections.emptyMap();
-		return jdbc.queryForObject(COUNT_TODO, params, Integer.class);
-	}
-
 	public Todo selectById(Integer id) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("id", id);
-		return jdbc.queryForObject(SELECT_BY_ID, params, rowMapper);
+		Map<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("id", id);
+		return jdbc.queryForObject(SELECT_BY_ID, paramsMap, rowMapper);
 	}
 
 	public List<Todo> selectByStatus(String status) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("status", status);
-		return jdbc.query(SELECT_BY_STATUS, params, rowMapper);
+		Map<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("status", status);
+		return jdbc.query(SELECT_BY_STATUS, paramsMap, rowMapper);
 	}
 
 	public List<Todo> selectAll() {
-		Map<String, Object> params = Collections.emptyMap();
-		return jdbc.query(SELECT_ALL, params, rowMapper);
+		Map<String, Object> paramsMap = Collections.emptyMap();
+		return jdbc.query(SELECT_ALL, paramsMap, rowMapper);
 	}
 
-	public Todo insert(Todo todo) {
-        SqlParameterSource params = new BeanPropertySqlParameterSource(todo);
+	public Todo create(Todo todo) {
+        SqlParameterSource paramsSource = new BeanPropertySqlParameterSource(todo);
 		KeyHolder holder = new GeneratedKeyHolder();
-		jdbc.update(INSERT_TODO, params, holder, new String[] {"id"});
+		jdbc.update(INSERT_TODO, paramsSource, holder, new String[] {"id"});
 
 		Number generatedId = holder.getKey();
 		long id = generatedId.intValue();
 
-		Map<String, Object> params1 = new HashMap<>();
-		params1.put("id", id);
+		Map<String, Object> paramsMap = new HashMap<>();
+		paramsMap.put("id", id);
 
-		return jdbc.queryForObject(SELECT_BY_ID, params1, BeanPropertyRowMapper.newInstance(Todo.class));
+		return jdbc.queryForObject(SELECT_BY_ID, paramsMap, BeanPropertyRowMapper.newInstance(Todo.class));
 	}
 
-	public Todo update(Todo todo) {
-		SqlParameterSource params = new BeanPropertySqlParameterSource(todo);
-		return jdbc.queryForObject(UPDATE_BY_ID, params, rowMapper);
+	public Integer update(Todo todo) {
+		SqlParameterSource paramsSource = new BeanPropertySqlParameterSource(todo);
+		return jdbc.update(UPDATE_BY_ID, paramsSource);
 	}
 
 	public Integer deleteById(Integer id) {
-		Map<String, ?> params = Collections.singletonMap("id", id);
-		return jdbc.update(DELETE_BY_ID, params);
+		Map<String, ?> paramsMap = Collections.singletonMap("id", id);
+		return jdbc.update(DELETE_BY_ID, paramsMap);
 	}
 
 }

@@ -1,6 +1,7 @@
 package kr.or.connect.todo.api;
 
 import kr.or.connect.todo.domain.Todo;
+import kr.or.connect.todo.domain.TodoStatus;
 import kr.or.connect.todo.service.TodoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,34 +18,21 @@ import java.util.Collection;
 @RequestMapping("/api/todos")
 public class TodoController {
     private final TodoService todoService;
-    private final Logger log = LoggerFactory.getLogger(TodoController.class);
 
     @Autowired
     public TodoController(TodoService todoService) {
         this.todoService = todoService;
     }
 
-    @GetMapping
-    Collection<Todo> readList() {
-        return todoService.findAll();
-    }
-
     @GetMapping("/{status}")
-    Collection<Todo> readByStatus(@PathVariable String status) {
+    Collection<Todo> readTodosByStatus(@PathVariable String status) {
         return todoService.findByStatus(status);
     }
 
     @GetMapping("/count")
-    public Integer countTodo() {
-        return todoService.count();
+    public Integer countActiveTodos() {
+        return todoService.findByStatus(TodoStatus.ACTIVE_TODO.getCode()).size();
     }
-
-
-//    @GetMapping("/{id}")
-//    Todo readById(@PathVariable Integer id) {
-//        return todoService.findById(id);
-//    }
-
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -54,14 +42,14 @@ public class TodoController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    Todo update(@PathVariable Integer id, @RequestBody Todo todo) {
+    Integer update(@RequestBody Todo todo) {
         return todoService.update(todo);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     void delete(@PathVariable Integer id) {
-        todoService.delete(id);
+        todoService.deleteById(id);
     }
 
 }

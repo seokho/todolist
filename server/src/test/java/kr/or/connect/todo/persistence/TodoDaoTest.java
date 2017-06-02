@@ -3,6 +3,7 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
 import kr.or.connect.todo.domain.Todo;
+import kr.or.connect.todo.domain.TodoStatus;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,7 @@ public class TodoDaoTest {
 
     @Test
     public void shouldCount() {
-        Integer count = dao.countTodo();
+        Integer count = dao.selectByStatus(TodoStatus.ACTIVE_TODO.getCode()).size();
         assertThat(count, is(notNullValue()));
     }
 

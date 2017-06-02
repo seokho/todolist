@@ -6,16 +6,13 @@ public class TodoSqls {
 	static final String DELETE_BY_ID =
 			"DELETE FROM todo WHERE id= :id";
 	static final String SELECT_BY_STATUS =
-			"SELECT id, title, created, modified FROM todo WHERE status= :status";
+			"SELECT id, title, created, modified FROM todo WHERE status= :status ORDER BY modified DESC";
 	static final String SELECT_BY_ID =
 			"SELECT id, title, created, modified FROM todo WHERE id= :id";
 	static final String UPDATE_BY_ID =
 			"UPDATE todo SET\n"
-					+ "status = :status,"
+					+ "status = :status "
 					+ "WHERE id = :id";
-	static final String COUNT_TODO =
-			"SELECT COUNT(*) FROM todo WHERE status= 0";
-
 	static final String INSERT_TODO =
 			"INSERT INTO todo(title, status) VALUES (:title, :status)";
 }
