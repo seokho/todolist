@@ -4,11 +4,11 @@
 	completed = 1;
 
 	//page load -> show todo list
-	getTodosList(todos);
+	getTodosListAjax(todos);
 	//show completed list
-	getTodosList(completed);
+	getTodosListAjax(completed);
 	//count todos
-	countTodo();
+	countTodoAjax();
 
 	
 	//input new-todo
@@ -21,10 +21,7 @@
 	});
 
 	//todo -> completed
-	updateTask(34, 2);
-	$('.delete').click(function() {
-		alert("asdasd");
-	});
+	
 	
 
 
@@ -33,7 +30,7 @@
 var url;
 var todos, completed;
 
-function updateTask(id, task) {
+function updateTaskAjax(id, task) {
 	var todo = {
 		id : id,
 		task : task,
@@ -45,14 +42,14 @@ function updateTask(id, task) {
 		data : JSON.stringify(todo),
 		contentType : "application/json; charset=UTF-8",
 		success : function(data) {
-			countTodo();
+			countTodoAjax();
 		}
 
 	})
 	
 }
 
-function countTodo() {
+function countTodoAjax() {
 	$.ajax({
 		url : url+"/count",
 		type : "get",
@@ -63,18 +60,28 @@ function countTodo() {
 
 }
 
+function drowTodo(todo, className) {
+	var html = '<div class="view"><input class="toggle" type="checkbox"><label>'+todo.title+'</label><button class="delete" id="'+todo.id+'"">x</button></div>';
+	className.append(html);
+}
+
 function drowList(list, className) {
 	for(var i in list) {
-		var html = '<div class="view"><input class="toggle" type="checkbox"><label>'+list[i].title+'</label><button class="delete" id="'+list[i].id+'"">x</button></div>';
+		var html = '<div class="view"><input class="toggle" type="checkbox"><label id="'+list[i].id+'">'+list[i].title+'</label><button class="delete" id="'+list[i].id+'"">x</button></div>';
 		className.append(html);
 		$('.delete').click(function(){
-			updateTask(this.id, 2);
+			updateTaskAjax(this.id, 2);
+		});
+		$('label').click(function() {
+			updateTaskAjax(this.id, 1);
+			console.log("click : "+this.id);
+
 		});
 	}
 
 }
 
-function getTodosList(task) {
+function getTodosListAjax(task) {
 	var todoList = {};
 	var className;
 	$.ajax({
@@ -109,7 +116,8 @@ function inputTodoAjax(data) {
 		contentType : "application/json; charset=UTF-8", 
 		success : function(data) {
 			alert("Success registration todo");
-			countTodo();
+			countTodoAjax();
+			drowTodo(data, $('li.todo-list'));
 
 		},
 		error : function(request,status,error){

@@ -11,7 +11,6 @@ public class TodoSqls {
 			"SELECT id, title, desc, created, modified FROM todo WHERE id= :id";
 	static final String UPDATE_BY_ID =
 			"UPDATE todo SET\n"
-					+ "title = :title,"
 					+ "desc = :desc,"
 					+ "task = :task,"
 					+ "modified = CURRENT_TIMESTAMP()\n"
