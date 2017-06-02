@@ -30,10 +30,10 @@
 var url;
 var todos, completed;
 
-function updateTaskAjax(id, task) {
+function updateStatusAjax(id, status) {
 	var todo = {
 		id : id,
-		task : task,
+        status : status,
 	}
 	$.ajax({
 		url : url+"/"+id,
@@ -70,10 +70,10 @@ function drowList(list, className) {
 		var html = '<div class="view"><input class="toggle" type="checkbox"><label id="'+list[i].id+'">'+list[i].title+'</label><button class="delete" id="'+list[i].id+'"">x</button></div>';
 		className.append(html);
 		$('.delete').click(function(){
-			updateTaskAjax(this.id, 2);
+			updateStatusAjax(this.id, 2);
 		});
 		$('label').click(function() {
-			updateTaskAjax(this.id, 1);
+			updateStatusAjax(this.id, 1);
 			console.log("click : "+this.id);
 
 		});
@@ -81,15 +81,15 @@ function drowList(list, className) {
 
 }
 
-function getTodosListAjax(task) {
+function getTodosListAjax(status) {
 	var todoList = {};
 	var className;
 	$.ajax({
-		url : url+"/"+task,
+		url : url+"/"+status,
 		type : "get",
 		success: function(data) {
 			todoList = data;
-			if(task === 0) {
+			if(status === 0) {
 				className = $('li.todo-list');
 			} else {
 				className = $('li.completed-list');
@@ -106,7 +106,7 @@ function inputTodoAjax(data) {
 	var todo = {
 		title : data,
 		desc : "null",
-		task : 0
+        status : 0
 	};
 	$.ajax({
 		url : url,
