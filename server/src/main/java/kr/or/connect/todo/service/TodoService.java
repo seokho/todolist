@@ -47,4 +47,5 @@ public class TodoService {
         return dao.deleteByClick(id);
     }
 
+    public Integer count() { return dao.countTodo(); }
 }

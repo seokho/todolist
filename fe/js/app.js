@@ -1,8 +1,15 @@
 (function (window) {
 	url = "/api/todos";
+	todos = 0;
+	completed = 1;
 
-	getTodosList(0);
-	// getTOdosList(1);
+	//page load -> show todo list
+	getTodosList(todos);
+	//show completed list
+	getTodosList(completed);
+	//count todos
+	countTodo();
+
 	
 	//input new-todo
 	$('.new-todo').on('keypress', function(e) {
@@ -13,17 +20,56 @@
 		}
 	});
 
+	//todo -> completed
+	updateTask(34, 2);
+	$('.delete').click(function() {
+		alert("asdasd");
+	});
+	
+
 
 })(window);
 
 var url;
+var todos, completed;
+
+function updateTask(id, task) {
+	var todo = {
+		id : id,
+		task : task,
+	}
+	$.ajax({
+		url : url+"/"+id,
+		dataType : "json",
+		type : "put",
+		data : JSON.stringify(todo),
+		contentType : "application/json; charset=UTF-8",
+		success : function(data) {
+			countTodo();
+		}
+
+	})
+	
+}
+
+function countTodo() {
+	$.ajax({
+		url : url+"/count",
+		type : "get",
+		success: function(data) {
+			$('.todo-count').children('strong').text(data);
+		}
+	})
+
+}
 
 function drowList(list, className) {
-	console.log(list);
 	for(var i in list) {
-		console.log(list[i]);
-		var html = '<div class="view" id="'+list[i].id+'"><input class="toggle" type="checkbox"><label>'+list[i].title+'</label><button class="destroy"></button></div>';
+		var html = '<div class="view"><input class="toggle" type="checkbox"><label>'+list[i].title+'</label><button class="delete" id="'+list[i].id+'"">x</button></div>';
 		className.append(html);
+		$('.delete').click(function(){
+			updateTask(this.id, 2);
+		});
 	}
 
 }
@@ -63,6 +109,8 @@ function inputTodoAjax(data) {
 		contentType : "application/json; charset=UTF-8", 
 		success : function(data) {
 			alert("Success registration todo");
+			countTodo();
+
 		},
 		error : function(request,status,error){
 			alert("code:"+request.status+"\n"+"error:"+error);

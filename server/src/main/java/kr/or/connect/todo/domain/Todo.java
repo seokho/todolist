@@ -1,9 +1,6 @@
 package kr.or.connect.todo.domain;
 
-import kr.or.connect.todo.global.TaskState;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.util.Date;
 

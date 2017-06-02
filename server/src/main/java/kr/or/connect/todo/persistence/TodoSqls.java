@@ -17,7 +17,7 @@ public class TodoSqls {
 					+ "modified = CURRENT_TIMESTAMP()\n"
 					+ "WHERE id = :id";
 	static final String COUNT_TODO =
-			"SELECT COUNT(*) FROM todo";
+			"SELECT COUNT(*) FROM todo WHERE task= 0";
 
 	static final String INSERT_TODO =
 			"INSERT INTO todo(title, desc, task) VALUES (:title, :desc, :task)";

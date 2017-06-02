@@ -31,7 +31,7 @@ public class TodoDao {
 
 	}
 
-	public Integer countTodo() {
+	public Integer countTodo( ) {
 		Map<String, Object> params = Collections.emptyMap();
 		return jdbc.queryForObject(COUNT_TODO, params, Integer.class);
 	}

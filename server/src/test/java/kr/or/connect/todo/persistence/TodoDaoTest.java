@@ -24,7 +24,7 @@ public class TodoDaoTest {
 
     @Test
     public void shouldCount() {
-        int count = dao.countTodo();
+        Integer count = dao.countTodo();
         assertThat(count, is(notNullValue()));
     }
 

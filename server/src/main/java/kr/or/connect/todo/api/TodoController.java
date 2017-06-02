@@ -34,10 +34,17 @@ public class TodoController {
         return todoService.findByTask(task);
     }
 
+    @GetMapping("/count")
+    public Integer countTodo() {
+        return todoService.count();
+    }
+
+
 //    @GetMapping("/{id}")
 //    Todo readById(@PathVariable Integer id) {
 //        return todoService.findById(id);
 //    }
+
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
