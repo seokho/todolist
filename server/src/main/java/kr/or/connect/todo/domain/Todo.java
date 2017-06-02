@@ -11,8 +11,7 @@ import java.util.Date;
 public class Todo {
     private Integer id;
     private String title;
-    private String desc;
-    private Integer task;
+    private Integer status;
 
     private Date created;
     private Date modified;

@@ -10,7 +10,7 @@
 	//count todos
 	countTodoAjax();
 
-	
+
 	//input new-todo
 	$('.new-todo').on('keypress', function(e) {
 		var newTodo = $('.new-todo');
@@ -21,8 +21,8 @@
 	});
 
 	//todo -> completed
-	
-	
+
+
 
 
 })(window);
@@ -46,7 +46,7 @@ function updateTaskAjax(id, task) {
 		}
 
 	})
-	
+
 }
 
 function countTodoAjax() {
@@ -61,7 +61,7 @@ function countTodoAjax() {
 }
 
 function drowTodo(todo, className) {
-	var html = '<div class="view"><input class="toggle" type="checkbox"><label>'+todo.title+'</label><button class="delete" id="'+todo.id+'"">x</button></div>';
+	var html = '<div class="view"><input class="toggle" type="checkbox"><label id="'+todo.id+'">'+todo.title+'</label><button class="delete" id="'+todo.id+'"">x</button></div>';
 	className.append(html);
 }
 
@@ -113,7 +113,7 @@ function inputTodoAjax(data) {
 		dataType : "json",
 		type : "post",
 		data : JSON.stringify(todo),
-		contentType : "application/json; charset=UTF-8", 
+		contentType : "application/json; charset=UTF-8",
 		success : function(data) {
 			alert("Success registration todo");
 			countTodoAjax();

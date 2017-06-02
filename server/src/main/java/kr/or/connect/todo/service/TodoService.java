@@ -4,6 +4,7 @@ import kr.or.connect.todo.domain.Todo;
 import kr.or.connect.todo.persistence.TodoDao;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -18,34 +19,31 @@ public class TodoService {
     }
 
     public Todo create(Todo todo) {
-        Integer id = dao.insert(todo);
-        todo.setId(id);
-        return todo;
+        return dao.insert(todo);
     }
 
     public Todo findById(Integer id) {
         return dao.selectById(id);
     }
 
-    public List<Todo> findByTask(String task) {
-        return dao.selectByTask(task);
+    public List<Todo> findByStatus(String status) {
+        return dao.selectByStatus(status);
     }
 
     public List<Todo> findAll() {
         return dao.selectAll();
     }
 
-    public Integer insert(Todo todo) {
-        return dao.insert(todo);
-    }
-
-    public Integer update(Todo todo) {
+    public Todo update(Todo todo) {
+        todo.setModified(new Date());
         return dao.update(todo);
     }
 
     public Integer delete(Integer id) {
-        return dao.deleteByClick(id);
+        return dao.deleteById(id);
     }
 
-    public Integer count() { return dao.countTodo(); }
+    public int count() {
+        return 0;
+    }
 }

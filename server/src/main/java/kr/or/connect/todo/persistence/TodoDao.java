@@ -10,6 +10,8 @@ import org.springframework.jdbc.core.namedparam.BeanPropertySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collections;
@@ -42,10 +44,10 @@ public class TodoDao {
 		return jdbc.queryForObject(SELECT_BY_ID, params, rowMapper);
 	}
 
-	public List<Todo> selectByTask(String task) {
+	public List<Todo> selectByStatus(String status) {
 		Map<String, Object> params = new HashMap<>();
-		params.put("task", task);
-		return jdbc.query(SELECT_BY_TASK, params, rowMapper);
+		params.put("status", status);
+		return jdbc.query(SELECT_BY_STATUS, params, rowMapper);
 	}
 
 	public List<Todo> selectAll() {
@@ -53,19 +55,26 @@ public class TodoDao {
 		return jdbc.query(SELECT_ALL, params, rowMapper);
 	}
 
-	public Integer insert(Todo todo) {
-        System.out.println(todo);
+	public Todo insert(Todo todo) {
         SqlParameterSource params = new BeanPropertySqlParameterSource(todo);
-        return jdbc.update(INSERT_TODO, params);
-//        return insertAction.executeAndReturnKey(params).intValue();
+		KeyHolder holder = new GeneratedKeyHolder();
+		jdbc.update(INSERT_TODO, params, holder, new String[] {"id"});
+
+		Number generatedId = holder.getKey();
+		long id = generatedId.intValue();
+
+		Map<String, Object> params1 = new HashMap<>();
+		params1.put("id", id);
+
+		return jdbc.queryForObject(SELECT_BY_ID, params1, BeanPropertyRowMapper.newInstance(Todo.class));
 	}
 
-	public Integer update(Todo todo) {
+	public Todo update(Todo todo) {
 		SqlParameterSource params = new BeanPropertySqlParameterSource(todo);
-		return jdbc.update(UPDATE_BY_ID, params);
+		return jdbc.queryForObject(UPDATE_BY_ID, params, rowMapper);
 	}
 
-	public Integer deleteByClick(Integer id) {
+	public Integer deleteById(Integer id) {
 		Map<String, ?> params = Collections.singletonMap("id", id);
 		return jdbc.update(DELETE_BY_ID, params);
 	}

@@ -2,22 +2,20 @@ package kr.or.connect.todo.persistence;
 
 public class TodoSqls {
 	static final String SELECT_ALL =
-			"SELECT id, title, desc, created, modified FROM todo";
+			"SELECT id, title, created, modified FROM todo";
 	static final String DELETE_BY_ID =
 			"DELETE FROM todo WHERE id= :id";
-	static final String SELECT_BY_TASK =
-			"SELECT id, title, desc, created, modified FROM todo WHERE task= :task";
+	static final String SELECT_BY_STATUS =
+			"SELECT id, title, created, modified FROM todo WHERE status= :status";
 	static final String SELECT_BY_ID =
-			"SELECT id, title, desc, created, modified FROM todo WHERE id= :id";
+			"SELECT id, title, created, modified FROM todo WHERE id= :id";
 	static final String UPDATE_BY_ID =
 			"UPDATE todo SET\n"
-					+ "desc = :desc,"
-					+ "task = :task,"
-					+ "modified = CURRENT_TIMESTAMP()\n"
+					+ "status = :status,"
 					+ "WHERE id = :id";
 	static final String COUNT_TODO =
-			"SELECT COUNT(*) FROM todo WHERE task= 0";
+			"SELECT COUNT(*) FROM todo WHERE status= 0";
 
 	static final String INSERT_TODO =
-			"INSERT INTO todo(title, desc, task) VALUES (:title, :desc, :task)";
+			"INSERT INTO todo(title, status) VALUES (:title, :status)";
 }

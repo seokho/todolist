@@ -29,9 +29,9 @@ public class TodoController {
         return todoService.findAll();
     }
 
-    @GetMapping("/{task}")
-    Collection<Todo> readByTask(@PathVariable String task) {
-        return todoService.findByTask(task);
+    @GetMapping("/{status}")
+    Collection<Todo> readByStatus(@PathVariable String status) {
+        return todoService.findByStatus(status);
     }
 
     @GetMapping("/count")
@@ -49,16 +49,13 @@ public class TodoController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     Todo create(@RequestBody Todo todo) {
-        Todo newTodo = todoService.create(todo);
-        log.info("todo created : {}", newTodo);
-        return todo;
+        return todoService.create(todo);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void update(@PathVariable Integer id, @RequestBody Todo todo) {
-        todo.setId(id);
-        todoService.update(todo);
+    Todo update(@PathVariable Integer id, @RequestBody Todo todo) {
+        return todoService.update(todo);
     }
 
     @DeleteMapping("/{id}")
