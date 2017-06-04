@@ -52,4 +52,9 @@ public class TodoController {
         todoService.deleteById(id);
     }
 
+    @DeleteMapping("/status/{status}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void deleteByStatus(@PathVariable Integer status) { todoService.deleteByStatus(status); }
+
+
 }

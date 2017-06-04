@@ -13,8 +13,15 @@ var REMOVED_TODO_CODE = 2;
     // bind event
     bindEventAtInputActiveTodo();
     bindEventAtStatusFilter();
+    bindEventAtClearButton();
 
 })(window);
+
+function bindEventAtClearButton() {
+    $('.clear-completed').click(function() {
+        deleteStatusAjax(COMPLETED_TODO_CODE);
+    });
+}
 
 function bindEventAtInputActiveTodo() {
     $('.new-todo').on('keypress', function (e) {
@@ -49,7 +56,7 @@ function bindEventAtElementClick() {
     console.log("bindEventAtElementClick");
 
     $('.destroy').off('click').on('click', function () {
-        deleteAjax(this.id);
+        deleteElementAjax(this.id);
     });
     $('#active label').off('click').on('click', function () {
         var todo = {
@@ -149,7 +156,23 @@ function setActiveTodosCount() {
     })
 }
 
-function deleteAjax(id) {
+function deleteStatusAjax(status) {
+    var $element;
+    if(status === ACTIVE_TODO_CODE) {
+        $element = $('.todo-list');
+    } else {
+        $element = $('.completed-list');
+    }
+    $.ajax({
+        url: API_URL + "/status/" + status,
+        type: "delete",
+        success: function() {
+            $element.children().remove();
+        }
+    })
+}
+
+function deleteElementAjax(id) {
     var $element = $('#'+id);
     $.ajax({
         url: API_URL + "/" +id,
@@ -162,10 +185,6 @@ function deleteAjax(id) {
 
 function updateStatusAjax(todo) {
     var $element = $('#' + todo.id);
-    // var todo = {
-    //     id: id,
-    //     status: status
-    // };
 
     $.ajax({
         url: API_URL + "/" + todo.id,
