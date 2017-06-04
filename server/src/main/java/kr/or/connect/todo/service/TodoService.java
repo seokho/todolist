@@ -18,7 +18,7 @@ public class TodoService {
         this.dao = dao;
     }
 
-    public List<Todo> findByStatus(String status) {
+    public List<Todo> findByStatus(Integer status) {
         return dao.selectByStatus(status);
     }
 
@@ -34,4 +34,6 @@ public class TodoService {
     public Integer deleteById(Integer id) {
         return dao.deleteById(id);
     }
+
+    public Integer deleteByStatus(Integer status) { return dao.deleteByStatus(status); }
 }

@@ -10,9 +10,9 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum TodoStatus {
-    ACTIVE_TODO("0"),
-    COMPLETED_TODO("1"),
-    REMOVED_TODO("2");
+    ACTIVE_TODO(0),
+    COMPLETED_TODO(1),
+    REMOVED_TODO(2);
 
-    private String code;
+    private Integer code;
 }

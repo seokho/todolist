@@ -10,7 +10,6 @@ var REMOVED_TODO_CODE = 2;
 
     //show completed list
     getTodosByStatus(COMPLETED_TODO_CODE);
-
     // bind event
     bindEventAtInputActiveTodo();
     bindEventAtStatusFilter();
@@ -47,12 +46,12 @@ function bindEventAtStatusFilter() {
 
 }
 function bindEventAtElementClick() {
+    console.log("bindEventAtElementClick");
 
-
-    $('.destroy').click(function () {
+    $('.destroy').off('click').on('click', function () {
         deleteAjax(this.id);
     });
-    $('#active label').click(function () {
+    $('#active label').off('click').on('click', function () {
         var todo = {
             id : this.id,
             title : $('#'+this.id).text(),
@@ -63,10 +62,8 @@ function bindEventAtElementClick() {
     });
 }
 
-function drawActiveTodos(todos, $element) {
+function drawTodosByStatus(todos, $element) {
     for (var i in todos) {
-        console.log('todos', todos);
-        console.log('i', i);
         var html = '<div class="view">' +
             '<input class="toggle" type="checkbox">' +
             '<label id="' + todos[i].id + '">' + todos[i].title + '</label>' +
@@ -74,6 +71,7 @@ function drawActiveTodos(todos, $element) {
             '</div>';
         $element.append(html);
     }
+    console.log("drawTodosByStatus call -> bindEventAtElementClick");
     bindEventAtElementClick();
 
 }
@@ -89,7 +87,7 @@ function drawTodo(todo, $element, status) {
     } else {
         $element.prepend(html);
     }
-
+    console.log("drawTodo call -> bindEventAtElementClick");
     bindEventAtElementClick();
 }
 function drawActiveTodosCount(count) {
@@ -109,7 +107,7 @@ function getTodosByStatus(status) {
             } else {
                 $element = $('li.completed-list');
             }
-            drawActiveTodos(data, $element);
+            drawTodosByStatus(data, $element);
             setActiveTodosCount();
         }
     });

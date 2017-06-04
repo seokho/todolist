@@ -39,7 +39,7 @@ public class TodoDao {
 		return jdbc.queryForObject(SELECT_BY_ID, paramsMap, rowMapper);
 	}
 
-	public List<Todo> selectByStatus(String status) {
+	public List<Todo> selectByStatus(Integer status) {
 		Map<String, Object> paramsMap = new HashMap<>();
 		paramsMap.put("status", status);
 		return jdbc.query(SELECT_BY_STATUS, paramsMap, rowMapper);
@@ -74,4 +74,8 @@ public class TodoDao {
 		return jdbc.update(DELETE_BY_ID, paramsMap);
 	}
 
+	public Integer deleteByStatus(Integer status) {
+		Map<String, ?> paramsMap = Collections.singletonMap("status", status);
+		return jdbc.update(DELETE_BY_STATUS, paramsMap);
+	}
 }

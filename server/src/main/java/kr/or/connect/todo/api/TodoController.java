@@ -1,7 +1,7 @@
 package kr.or.connect.todo.api;
 
 import kr.or.connect.todo.domain.Todo;
-import kr.or.connect.todo.domain.TodoStatus;
+import static kr.or.connect.todo.domain.TodoStatus.*;
 import kr.or.connect.todo.service.TodoService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,13 +25,13 @@ public class TodoController {
     }
 
     @GetMapping("/{status}")
-    Collection<Todo> readTodosByStatus(@PathVariable String status) {
+    Collection<Todo> readTodosByStatus(@PathVariable Integer status) {
         return todoService.findByStatus(status);
     }
 
     @GetMapping("/count")
     public Integer countActiveTodos() {
-        return todoService.findByStatus(TodoStatus.ACTIVE_TODO.getCode()).size();
+        return todoService.findByStatus(ACTIVE_TODO.getCode()).size();
     }
 
     @PostMapping
