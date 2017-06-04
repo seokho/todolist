@@ -10,6 +10,7 @@ var REMOVED_TODO_CODE = 2;
 
     //show completed list
     getTodosByStatus(COMPLETED_TODO_CODE);
+
     // bind event
     bindEventAtInputActiveTodo();
     bindEventAtStatusFilter();
@@ -36,9 +37,6 @@ function bindEventAtInputActiveTodo() {
 function bindEventAtStatusFilter() {
     var $active = $('li.todo-list');
     var $completed = $('li.completed-list');
-    $('.filters').find('a').hover(function(e) {
-        $(this).css('border-color',e.type === 'mouseenter'?'rgba(175, 47, 47, 0.1)':'transparent');
-    })
 
     $('a.all').click(function () {
         $active.show();
@@ -58,7 +56,6 @@ function bindEventAtStatusFilter() {
         $completed.show();
         bindCSSAtStatusFilter( $('a.completed'));
     });
-
 }
 
 function bindCSSAtStatusFilter($element) {
