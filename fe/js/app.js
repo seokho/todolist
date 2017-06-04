@@ -13,6 +13,8 @@ var REMOVED_TODO_CODE = 2;
 
     // bind event
     bindEventAtInputActiveTodo();
+    bindEventAtStatusFilter();
+
 })(window);
 
 function bindEventAtInputActiveTodo() {
@@ -22,6 +24,42 @@ function bindEventAtInputActiveTodo() {
             inputActiveTodoAjax($newTodoElement.val());
             $newTodoElement.val('');
         }
+    });
+}
+
+function bindEventAtStatusFilter() {
+    var $active = $('li.todo-list');
+    var $completed = $('li.completed-list');
+    $('a.all').click(function () {
+        $active.show();
+        $completed.show();
+    });
+
+    $('a.active').click(function () {
+        $active.show();
+        $completed.hide();
+    });
+
+    $('a.completed').click(function () {
+        $active.hide();
+        $completed.show();
+    });
+
+}
+function bindEventAtElementClick() {
+
+
+    $('.destroy').click(function () {
+        deleteAjax(this.id);
+    });
+    $('#active label').click(function () {
+        var todo = {
+            id : this.id,
+            title : $('#'+this.id).text(),
+            status : COMPLETED_TODO_CODE
+        };
+
+        updateStatusAjax(todo);
     });
 }
 
@@ -36,25 +74,24 @@ function drawActiveTodos(todos, $element) {
             '</div>';
         $element.append(html);
     }
+    bindEventAtElementClick();
 
-    $('.delete').click(function () {
-        updateStatusAjax(this.id, 2);
-    });
-    $('label').click(function () {
-        updateStatusAjax(this.id, 1);
-        console.log("click : " + this.id);
-    });
 }
 
-function drawTodo(todo, $element) {
+function drawTodo(todo, $element, status) {
     var html = '<div class="view">' +
         '<input class="toggle" type="checkbox">' +
         '<label id="' + todo.id + '">' + todo.title + '</label>' +
         '<button class="destroy" id="' + todo.id + '""></button>' +
         '</div>';
-    $element.append(html);
-}
+    if (status === ACTIVE_TODO_CODE) {
+        $element.append(html);
+    } else {
+        $element.prepend(html);
+    }
 
+    bindEventAtElementClick();
+}
 function drawActiveTodosCount(count) {
     $('.todo-count').children('strong').text(count);
 }
@@ -114,20 +151,37 @@ function setActiveTodosCount() {
     })
 }
 
-function updateStatusAjax(id, status) {
-    var todo = {
-        id: id,
-        status: status
-    };
+function deleteAjax(id) {
+    var $element = $('#'+id);
+    $.ajax({
+        url: API_URL + "/" +id,
+        type: "delete",
+        success: function() {
+            $element.parent().remove();
+        }
+    })
+}
+
+function updateStatusAjax(todo) {
+    var $element = $('#' + todo.id);
+    // var todo = {
+    //     id: id,
+    //     status: status
+    // };
 
     $.ajax({
-        url: API_URL + "/" + id,
+        url: API_URL + "/" + todo.id,
         dataType: "json",
         type: "put",
         data: JSON.stringify(todo),
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
+            console.log(todo.title);
             setActiveTodosCount();
+            $element.parent().remove();
+            drawTodo(todo, $('li.completed-list'), COMPLETED_TODO_CODE);
+
         }
     });
 }
+
