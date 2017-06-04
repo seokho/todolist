@@ -36,24 +36,37 @@ function bindEventAtInputActiveTodo() {
 function bindEventAtStatusFilter() {
     var $active = $('li.todo-list');
     var $completed = $('li.completed-list');
+    $('.filters').find('a').hover(function(e) {
+        $(this).css('border-color',e.type === 'mouseenter'?'rgba(175, 47, 47, 0.1)':'transparent');
+    })
+
     $('a.all').click(function () {
         $active.show();
         $completed.show();
+        bindCSSAtStatusFilter($('a.all'));
     });
 
     $('a.active').click(function () {
         $active.show();
         $completed.hide();
+        bindCSSAtStatusFilter( $('a.active'));
+
     });
 
     $('a.completed').click(function () {
         $active.hide();
         $completed.show();
+        bindCSSAtStatusFilter( $('a.completed'));
     });
 
 }
+
+function bindCSSAtStatusFilter($element) {
+    $('.filters').find('a').css('font-weight', 'normal');
+    $element.css('font-weight' ,'bold');
+}
+
 function bindEventAtElementClick() {
-    console.log("bindEventAtElementClick");
 
     $('.destroy').off('click').on('click', function () {
         deleteElementAjax(this.id);
@@ -78,7 +91,6 @@ function drawTodosByStatus(todos, $element) {
             '</div>';
         $element.append(html);
     }
-    console.log("drawTodosByStatus call -> bindEventAtElementClick");
     bindEventAtElementClick();
 
 }
@@ -94,7 +106,7 @@ function drawTodo(todo, $element, status) {
     } else {
         $element.prepend(html);
     }
-    console.log("drawTodo call -> bindEventAtElementClick");
+
     bindEventAtElementClick();
 }
 function drawActiveTodosCount(count) {
@@ -134,7 +146,6 @@ function inputActiveTodoAjax(data) {
         data: JSON.stringify(todo),
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
-            alert("Success registration todo");
             drawTodo(data, $('li.todo-list'));
             setActiveTodosCount();
         },
@@ -193,7 +204,6 @@ function updateStatusAjax(todo) {
         data: JSON.stringify(todo),
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
-            console.log(todo.title);
             setActiveTodosCount();
             $element.parent().remove();
             drawTodo(todo, $('li.completed-list'), COMPLETED_TODO_CODE);

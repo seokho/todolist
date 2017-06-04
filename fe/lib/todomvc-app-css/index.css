@@ -334,7 +334,7 @@ body {
 }
 
 .filters li a.all {
-	border-color: rgba(175, 47, 47, 0.2);
+	font-weight: bold;
 }
 
 .clear-completed,
