@@ -6,31 +6,30 @@ var REMOVED_TODO_CODE = 2;
 
 (function (window) {
     //page load -> show todo list
-    getTodosByStatus(ACTIVE_TODO_CODE);
+    getTodosByStatusAjax(ACTIVE_TODO_CODE);
 
     //show completed list
-    getTodosByStatus(COMPLETED_TODO_CODE);
+    getTodosByStatusAjax(COMPLETED_TODO_CODE);
 
     // bind event
     bindEventAtInputActiveTodo();
     bindEventAtStatusFilter();
     bindEventAtClearButton();
-
 })(window);
-
-function bindEventAtClearButton() {
-    $('.clear-completed').click(function() {
-        deleteStatusAjax(COMPLETED_TODO_CODE);
-    });
-}
 
 function bindEventAtInputActiveTodo() {
     $('.new-todo').on('keypress', function (e) {
         var $newTodoElement = $('.new-todo');
         if (e.which === 13 && $newTodoElement.val().length > 0) {
-            inputActiveTodoAjax($newTodoElement.val());
+            insertActiveTodoAjax($newTodoElement.val());
             $newTodoElement.val('');
         }
+    });
+}
+
+function bindEventAtClearButton() {
+    $('.clear-completed').click(function () {
+        deleteTodosByStatusAjax(COMPLETED_TODO_CODE);
     });
 }
 
@@ -47,34 +46,32 @@ function bindEventAtStatusFilter() {
     $('a.active').click(function () {
         $active.show();
         $completed.hide();
-        bindCSSAtStatusFilter( $('a.active'));
+        bindCSSAtStatusFilter($('a.active'));
 
     });
 
     $('a.completed').click(function () {
         $active.hide();
         $completed.show();
-        bindCSSAtStatusFilter( $('a.completed'));
+        bindCSSAtStatusFilter($('a.completed'));
     });
 }
 
 function bindCSSAtStatusFilter($element) {
     $('.filters').find('a').css('font-weight', 'normal');
-    $element.css('font-weight' ,'bold');
+    $element.css('font-weight', 'bold');
 }
 
 function bindEventAtElementClick() {
-
     $('.destroy').off('click').on('click', function () {
-        deleteElementAjax(this.id);
+        deleteTodoByIdAjax(this.id);
     });
     $('#active label').off('click').on('click', function () {
         var todo = {
-            id : this.id,
-            title : $('#'+this.id).text(),
-            status : COMPLETED_TODO_CODE
+            id: this.id,
+            title: $('#' + this.id).text(),
+            status: COMPLETED_TODO_CODE
         };
-
         updateStatusAjax(todo);
     });
 }
@@ -89,7 +86,6 @@ function drawTodosByStatus(todos, $element) {
         $element.append(html);
     }
     bindEventAtElementClick();
-
 }
 
 function drawTodo(todo, $element, status) {
@@ -103,14 +99,14 @@ function drawTodo(todo, $element, status) {
     } else {
         $element.prepend(html);
     }
-
     bindEventAtElementClick();
 }
+
 function drawActiveTodosCount(count) {
     $('.todo-count').children('strong').text(count);
 }
 
-function getTodosByStatus(status) {
+function getTodosByStatusAjax(status) {
     var todos = [];
     var $element;
     $.ajax({
@@ -124,13 +120,16 @@ function getTodosByStatus(status) {
                 $element = $('li.completed-list');
             }
             drawTodosByStatus(data, $element);
-            setActiveTodosCount();
+            getActiveTodosCountAjax();
+        },
+        error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "error:" + error);
         }
     });
     return todos;
 }
 
-function inputActiveTodoAjax(data) {
+function insertActiveTodoAjax(data) {
     var todo = {
         title: data,
         desc: "null",
@@ -144,7 +143,7 @@ function inputActiveTodoAjax(data) {
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
             drawTodo(data, $('li.todo-list'));
-            setActiveTodosCount();
+            getActiveTodosCountAjax();
         },
         error: function (request, status, error) {
             alert("code:" + request.status + "\n" + "error:" + error);
@@ -152,7 +151,7 @@ function inputActiveTodoAjax(data) {
     });
 }
 
-function setActiveTodosCount() {
+function getActiveTodosCountAjax() {
     $.ajax({
         url: API_URL + "/count",
         dataType: "json",
@@ -160,33 +159,9 @@ function setActiveTodosCount() {
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
             drawActiveTodosCount(data);
-        }
-    })
-}
-
-function deleteStatusAjax(status) {
-    var $element;
-    if(status === ACTIVE_TODO_CODE) {
-        $element = $('.todo-list');
-    } else {
-        $element = $('.completed-list');
-    }
-    $.ajax({
-        url: API_URL + "/status/" + status,
-        type: "delete",
-        success: function() {
-            $element.children().remove();
-        }
-    })
-}
-
-function deleteElementAjax(id) {
-    var $element = $('#'+id);
-    $.ajax({
-        url: API_URL + "/" +id,
-        type: "delete",
-        success: function() {
-            $element.parent().remove();
+        },
+        error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "error:" + error);
         }
     })
 }
@@ -201,11 +176,46 @@ function updateStatusAjax(todo) {
         data: JSON.stringify(todo),
         contentType: "application/json; charset=UTF-8",
         success: function (data) {
-            setActiveTodosCount();
+            getActiveTodosCountAjax();
             $element.parent().remove();
             drawTodo(todo, $('li.completed-list'), COMPLETED_TODO_CODE);
-
+        },
+        error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "error:" + error);
         }
     });
 }
 
+function deleteTodosByStatusAjax(status) {
+    var $element;
+    if (status === ACTIVE_TODO_CODE) {
+        $element = $('.todo-list');
+    } else {
+        $element = $('.completed-list');
+    }
+
+    $.ajax({
+        url: API_URL + "/status/" + status,
+        type: "delete",
+        success: function () {
+            $element.children().remove();
+        },
+        error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "error:" + error);
+        }
+    })
+}
+
+function deleteTodoByIdAjax(id) {
+    var $element = $('#' + id);
+    $.ajax({
+        url: API_URL + "/" + id,
+        type: "delete",
+        success: function () {
+            $element.parent().remove();
+        },
+        error: function (request, status, error) {
+            alert("code:" + request.status + "\n" + "error:" + error);
+        }
+    })
+}
