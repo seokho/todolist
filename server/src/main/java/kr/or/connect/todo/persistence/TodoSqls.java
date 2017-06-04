@@ -13,7 +13,8 @@ public class TodoSqls {
 			"SELECT id, title, created, modified FROM todo WHERE id= :id";
 	static final String UPDATE_BY_ID =
 			"UPDATE todo SET\n"
-					+ "status = :status "
+					+ "status = :status, "
+					+ "modified = CURRENT_TIMESTAMP() "
 					+ "WHERE id = :id";
 	static final String INSERT_TODO =
 			"INSERT INTO todo(title, status) VALUES (:title, :status)";

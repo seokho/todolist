@@ -27,7 +27,6 @@ public class TodoService {
     }
 
     public Integer update(Todo todo) {
-        todo.setModified(new Date());
         return dao.update(todo);
     }
 
