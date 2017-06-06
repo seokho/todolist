@@ -43,8 +43,8 @@ public class TodoDaoTest {
 
     @Test
     public void shouldSelectAll() {
-        List<Todo> allTodo = dao.selectAll();
-        assertThat(allTodo, is(notNullValue()));
+        List<Todo> queryReturnValue = dao.selectAll();
+        assertThat(queryReturnValue, is(notNullValue()));
     }
 
     @Test
